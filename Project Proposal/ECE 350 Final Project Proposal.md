@@ -4,7 +4,8 @@
 
 ### Overview:
 
-This project aims to build an emulation of an old sonar/radar system that used a CRT display and scanning sensor to develop a radar image of the systems surroundings. The goal is to use the FPGA board, ultrasonic sensor, a motor, and a VGA display to build a device that can scan its surroundings and display the outuput visually.
+This project aims to build a sonar/radar system that used a VGA display and scanning sensor to develop a radar image of the systems surrounding using the FPGA board, ultrasonic sensor, a motor. 
+
 
 ![](/Users/Kenneth/Desktop/ECE 350/350Sonar/Project Proposal/SAM_4299.jpg)
 *Example Radar System Display*
