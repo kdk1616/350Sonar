@@ -11,47 +11,68 @@ This project aims to build an emulation of an old sonar/radar system that used a
 
 
 
-### Computational Complexity/ CPU Mofifications:
+### Computational Complexity/ CPU Modifications:
 
-Completing this project will require a number of modifications and parts.
+#### Ultrasonic Sensor Integration:
 
-Using ultrasonic sensor
+The ultrasonic sensor provides distance measurements based on the time it takes for an ultrasonic pulse to travel to an object and back. Integrating this sensor with the FPGA board and CPU involves handling timing accurately.
 
-	4 pins:
-		* 5V, GND, Trig, Echo
+##### Ultrasonic Sensor Pins:
 
-		When trig set high, echo also goes high. Stays high until echo returns
-		
-		CPU MOD:
-		Need to have a counter that counts in microseconds (add flipflops to scale down clock speed and store count in register)
-		
-		Can then add a CPU operation to read from this special register which will be the "current time in ms"
-		
-		1. When trig goes high, store current time in register
-		2. When echo goes low (indicating echo recieved) store current time
-		3. Subtract end-start and multiply by speed of sound. This is the distance. use this to find the correct location on the screen to put a dot (see below) and then move the motor and repeat!
+The ultrasonic sensor typically has four pins: 5V, GND, Trig, and Echo.
 
-		
-		Edge cases:
-			* What do we do if there is nothign close enough for an echo (when do we timeout and move on)
-			* What do we do when the microsecond counter rolls over every 4,294,967,295 milliseconds (this will mess up one of the time measurements)
+- **Trig Pin**: This pin triggers the ultrasonic pulse.
+- **Echo Pin**: This pin goes high when the ultrasonic pulse is sent and remains high until the echo is received back.
 
-Operating Stepper Motor
+##### Needed CPU Modifications:
 
-		(sumamrize breifly based on later explanatation)
+To integrate the ultrasonic sensor with the FPGA CPU, the following modifications are necessary:
 
+1. **Microsecond Counter**: Implement a counter that counts in microseconds. This can be achieved by adding flip-flops to scale down the clock speed and store the count in a register. This counter will be used to measure the time intervals accurately.
 
-Fixed Point Math
+2. **Reading Current Time**: Add a CPU operation to read from the special register holding the current time in milliseconds. This operation will provide a timestamp for various events.
 
-		(explain how trig can be done using a look up table and fixed point convention.
-		This will also be need to find the distance from the sensor by multipliyign delay time by speed of sound in cm)
+3. **Distance Calculation**:
+   - When the Trig pin goes high, store the current time in the register.
+   - When the Echo pin goes low (indicating echo received), store the current time again.
+   - Calculate the time difference between the start and end times, and multiply it by the speed of sound to obtain the distance to the object. This distance will be used to determine the position of objects on the display.
 
-Plotting Distances using Frame Buffer
+#### Operating Stepper Motor:
 
-	Use lookup table to find x,y, offsets for dsitances for current each angle. Then plot in the nearest coordinate
-	Reset entire frame buffer after complete sweep.
+The stepper motor is responsible for rotating the ultrasonic sensor to scan its surroundings. The control involves toggling specific coil sequences to move the motor accurately.
 
+- **Stepper Motor Pins**: The stepper motor typically has four input pins corresponding to coils (A, B, C, D), in addition to power and ground.
 
+##### Needed CPU Modifications:
+
+To control the stepper motor with the FPGA CPU, the following modifications are needed:
+
+1. **Stepper Motor Sequence**: Define a sequence of coil activations to turn the motor in a desired direction. This sequence involves toggling the coils in a specific order.
+
+2. **Motor Control Logic**: Implement logic to drive the stepper motor based on the defined sequence. This logic should ensure accurate movement and positioning of the motor.
+
+3. **Speed Control**: Optionally, implement speed control logic to adjust the speed of the motor as needed.
+
+#### Fixed Point Math:
+
+Fixed-point math is essential for efficient trigonometric calculations and distance measurements.
+
+- **Trigonometric Calculations**: Use fixed-point representations and lookup tables to perform trigonometric calculations efficiently.
+
+- **Distance Calculation**: Utilize fixed-point arithmetic to multiply the delay time by the speed of sound to obtain distances accurately in centimeters.
+
+#### Plotting Distances using Frame Buffer:
+
+To visualize the surroundings on the VGA display, distances obtained from the ultrasonic sensor need to be plotted accurately.
+
+- **Coordinate Calculation**: Use lookup tables to find the offsets for distances at each angle. This information will be used to plot objects on the screen.
+
+- **Frame Buffer**: Implement logic to update the frame buffer with distance information for each angle. After completing a full sweep, reset the frame buffer to prepare for the next scan.
+
+### Edge Cases:
+
+- **No Object Detected**: Determine a timeout mechanism for cases where no object is detected within a certain time frame.
+- **Counter Rollover**: Handle the rollover of the microsecond counter, which may occur approximately every 4,294,967,295 milliseconds, to avoid inaccuracies in time measurements.
 
 
 ### Checkpoints and MVP:
@@ -77,8 +98,7 @@ Spining the sensor and plotting the distances on a coordinate system complicates
 
 ### Physical Design
 
-![](/Users/Kenneth/Desktop/ECE 350/Project Proposal/Sonar_Design.png)
-
+![](/Users/Kenneth/Desktop/ECE 350/350Sonar/Project Proposal/Sonar_Design.png)
 #### Parts Needed:
 
 
@@ -90,7 +110,7 @@ Slip-Ring:
 
 Stepper Motor / Controler Board:
 
-![](/Users/Kenneth/Desktop/ECE 350/Project Proposal/StepperWithDriver.jpg)
+![](/Users/Kenneth/Desktop/ECE 350/350Sonar/Project Proposal/StepperWithDriver.jpg)
 
 * To precicesly move the ultrasonic sensor a small amount between each "sensing" a stepper motor will be used to rotate the motor a consistent number of steps
 * A stepper motor operates by toggling magnetic coils in a specific sequence to turn the rotor of the motor to stable position.
@@ -119,6 +139,7 @@ The Motor control desing using a belt to spin the slip ring was prototyped using
 
 ![](protomotor.png)
 
+![](/Users/Kenneth/Desktop/ECE 350/350Sonar/Project Proposal/protomotor.png)
 
 ### Schedule:
 
