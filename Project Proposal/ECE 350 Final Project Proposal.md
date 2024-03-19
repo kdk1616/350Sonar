@@ -7,7 +7,7 @@
 This project aims to build a sonar/radar system that used a VGA display and scanning sensor to develop a radar image of the systems surrounding using the FPGA board, ultrasonic sensor, a motor. 
 
 
-![](/Users/Kenneth/Desktop/ECE 350/350Sonar/Project Proposal/SAM_4299.jpg)
+![](SAM_4299.jpg)
 *Example Radar System Display*
 
 
@@ -105,7 +105,7 @@ Spining the sensor and plotting the distances on a coordinate system complicates
 
 Slip-Ring:
 
-![](/Users/Kenneth/Desktop/ECE 350/350Sonar/Project Proposal/slip_ring.jpg)
+![](slip_ring.jpg)
 
 * A [slip ring](https://www.adafruit.com/product/736 ) is a bearing that connects wires through a rotating interface. This will enable the ultrasonic sensor to spin with full freedom without tangling or breaking the wires. The other side of the slip ring can be connected to the circuitry
 
@@ -138,6 +138,7 @@ To speed up the motor, the pair sequence can be sped up.
 
 The Motor control desing using a belt to spin the slip ring was prototyped using an Arduino to drive the setpper motor (without using built in stepper library). The motor was driven using a REDDuino which can run at 3.3 and 5V. The motor worked at 3.3V (although it was slower), so it may need to be driven at 5V using level matching since the FPGA driven pins are a 3.3V
 
+![](protomotor.png)
 
 ![](/Users/Kenneth/Desktop/ECE 350/350Sonar/Project Proposal/protomotor.png)
 
