@@ -73,7 +73,7 @@ To visualize the surroundings on the VGA display, distances obtained from the ul
 ### Edge Cases:
 
 - **No Object Detected**: Determine a timeout mechanism for cases where no object is detected within a certain time frame.
-- **Counter Rollover**: Handle the rollover of the microsecond counter, which may occur approximately every 4,294,967,295 milliseconds, to avoid inaccuracies in time measurements.
+- **Counter Rollover**: Handle the rollover of the microsecond counter, which may occur approximately every 4,294,967,295 milliseconds (~7 weeks), to avoid inaccuracies in time measurements.
 
 
 ### Checkpoints and MVP:
