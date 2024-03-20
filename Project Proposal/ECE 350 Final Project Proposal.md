@@ -99,7 +99,7 @@ Spining the sensor and plotting the distances on a coordinate system complicates
 
 ### Physical Design
 
-![](/Users/Kenneth/Desktop/ECE 350/350Sonar/Project Proposal/Sonar_Design.png)
+![](Sonar_Design.png)
 #### Parts Needed:
 
 
@@ -111,7 +111,7 @@ Slip-Ring:
 
 Stepper Motor / Controler Board:
 
-![](/Users/Kenneth/Desktop/ECE 350/350Sonar/Project Proposal/StepperWithDriver.jpg)
+![](StepperWithDriver.jpg)
 
 * To precicesly move the ultrasonic sensor a small amount between each "sensing" a stepper motor will be used to rotate the motor a consistent number of steps
 * A stepper motor operates by toggling magnetic coils in a specific sequence to turn the rotor of the motor to stable position.
@@ -140,7 +140,12 @@ The Motor control desing using a belt to spin the slip ring was prototyped using
 
 ![](protomotor.png)
 
-![](/Users/Kenneth/Desktop/ECE 350/350Sonar/Project Proposal/protomotor.png)
 
 ### Schedule:
 
+| Week      | Description |
+| ----------- | ----------- |
+| 1 | Add memory remapping to IO pins for processor, set up basic physical example with Arduino interfacing with stepper and ultrasonic sensor |
+| 2 | Add VGA support, display radar background image on screen, figure out how to plot pixel on display, design enclosure / prototype |
+| 3 | Write protocols for reading ultrasonic sensor and stepper motor in assembly, test on FPGA, start putting together final enclosure |
+| 4 | Complete integration of display, sensor reading, and motor stepping, finish final enclosure |
