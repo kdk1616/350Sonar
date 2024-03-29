@@ -1,6 +1,6 @@
 module register(out, clk, input_enable, in, reset);
 
-input clk, input_enable, output_enable;
+input clk, input_enable;
 input[31:0] in;
 input reset;
 output[31:0] out;

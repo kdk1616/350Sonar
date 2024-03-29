@@ -40,7 +40,7 @@ module bitmem(out, in, reset, clk);
 endmodule
 
 module register32(out, clk, input_enable, in, reset);
-    input clk, input_enable, output_enable;
+    input clk, input_enable;
     input[31:0] in;
     input reset;
     output[31:0] out;
@@ -54,7 +54,7 @@ module register32(out, clk, input_enable, in, reset);
 endmodule
 
 module register5(out, clk, input_enable, in, reset);
-    input clk, input_enable, output_enable;
+    input clk, input_enable;
     input[4:0] in;
     input reset;
     output[4:0] out;
@@ -87,7 +87,7 @@ module reg32_init(out, in, initial_value, clk, input_en, reset);
 endmodule
 
 module register64(out, clk, input_enable, in, reset);
-    input clk, input_enable, output_enable;
+    input clk, input_enable;
     input[63:0] in;
     input reset;
     output[63:0] out;
