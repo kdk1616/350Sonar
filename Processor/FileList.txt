@@ -8,7 +8,6 @@
 ./components/alu.v
 ./components/wallace.v
 ./components/register.v
-./components/multdiv.v
 ./components/controls.v
 ./components/cla_adder.v
 ./components/regfile.v

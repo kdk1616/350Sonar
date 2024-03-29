@@ -175,7 +175,8 @@ module xecute_branch(
     sign_extender_17 imm_extender(.in(ir[16:0]), .out(imm));
     sign_extender_27 target_extender(.in(ir[26:0]), .out(target));
 
-    cla_adder pc_adder(.S(jmp_pc_1_n), .X(pc), .Y(imm), .Cin(1'b0));
+    wire dummy_wire;
+    cla_adder pc_adder(.S(jmp_pc_1_n), .Cout(dummy_wire), .X(pc), .Y(imm), .Cin(1'b0));
 
     wire is_jump = (ir[31:27] == 5'b00001) | (ir[31:27] == 5'b00011) | (ir[31:27] == 5'b00100);
 
@@ -473,7 +474,7 @@ module Memory(
     input reg_wren, clock, reset;
     output[31:0] out_O, out_D, out_IR, data_dmem;
     output[31:0] address_dmem;
-    output data_wren, next_we;
+    output data_wren;
 
     wire[31:0] data_dmem;
 
