@@ -34,7 +34,7 @@ module FPGAWrapper (CLK, CPU_RESETN, LED);
 		rData, regA, regB,
 		memAddr, memDataIn, memDataOut;
 
-	assign LED = PC[4:0];
+	assign LED = instAddr[4:0];
 
 
 	// ADD YOUR MEMORY FILE HERE
