@@ -450,6 +450,31 @@ module choose_data_mem_input(
     );
 endmodule
 
+module write_to_pins(out, pins, ir, o, data_dmem, q_dmem, clk);
+    inout[7:0] pins;
+    input clk;
+    input[31:0] ir, o, data_dmem, q_dmem;
+    output[31:0] out;
+
+    assign data_wren = (ir[31:27] == 5'b00111) & o[12];
+    assign read_io = (ir[31:27] == 5'b01000) & o[12];
+
+    wire mode_we = o[13] & o[12];
+    wire val_we = ~o[13] & o[12];
+
+    wire[2:0] pin_num = o[2:0];
+
+    wire[7:0] pins_out;
+    io_pin_set io_pins(.out(pins_out), .pins(pins), .pin_num(pin_num), 
+                       .in(data_dmem[0]), .val_we(val_we), .mode_we(mode_we),
+                       .clk(clk));
+
+    wire pin_reading;
+    mux8_1bit read_io_mux(pin_reading, pin_num, pins_out[0], pins_out[1], pins_out[2], pins_out[3], pins_out[4], pins_out[5], pins_out[6], pins_out[7]);
+
+    assign out = read_io ? {31'b0, pin_reading} : q_dmem;
+endmodule
+
 module Memory(
     out_O,          // ALU output (unchanged)
     out_D,          // data from memory
@@ -457,6 +482,8 @@ module Memory(
     address_dmem,   // address to read/write from
     data_dmem,      // data to write
     data_wren,      // dmem write enable
+
+    pins,           // IO pins
 
     O,              // ALU output
     B,              // value from register B
@@ -476,6 +503,8 @@ module Memory(
     output[31:0] address_dmem;
     output data_wren;
 
+    inout[7:0] pins;
+
     wire[31:0] data_dmem;
 
     choose_data_mem_input set_data_dmem(
@@ -490,9 +519,12 @@ module Memory(
 
     assign address_dmem = O;
 
-    assign data_wren = ir[31:27] == 5'b00111;
+    assign data_wren = (ir[31:27] == 5'b00111) & ~O[12];
+
+    wire[31:0] mem_reading;
+    write_to_pins io(mem_reading, pins, ir, O, data_dmem, q_dmem, clock);
 
     register32 IR_reg(.out(out_IR), .in(ir), .clk(~clock), .input_enable(1'b1), .reset(reset));
     register32 O_reg(.out(out_O), .in(O), .clk(~clock), .input_enable(1'b1), .reset(reset));
-    register32 D_reg(.out(out_D), .in(q_dmem), .clk(~clock), .input_enable(1'b1), .reset(reset));
+    register32 D_reg(.out(out_D), .in(mem_reading), .clk(~clock), .input_enable(1'b1), .reset(reset));
 endmodule

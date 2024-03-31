@@ -39,11 +39,13 @@ module processor(
     ctrl_readRegB,                  // O: Register to read from port B of RegFile
     data_writeReg,                  // O: Data to write to for RegFile
     data_readRegA,                  // I: Data from port A of RegFile
-    data_readRegB                   // I: Data from port B of RegFile
+    data_readRegB,                   // I: Data from port B of RegFile
+    io_pins
 	);
 
 	// Control signals
 	input clock, reset;
+    inout[7:0] io_pins;
 	
 	// Imem
     output [31:0] address_imem;
@@ -61,6 +63,7 @@ module processor(
 	input [31:0] data_readRegA, data_readRegB;
 
 	/* YOUR CODE STARTS HERE */
+    
 
     //////////////////////// Fetch STAGE ////////////////////////
 
@@ -165,6 +168,8 @@ module processor(
         .address_dmem(address_dmem),
         .data_dmem(data),
         .data_wren(wren),
+
+        .pins(io_pins),
 
         .O(XM_O),
         .B(XM_B),

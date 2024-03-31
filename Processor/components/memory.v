@@ -150,3 +150,42 @@ module counter32(Q, clk, reset);
     and(inb34, inb23, Q[3]);
     tff tff4(Q[4], inb34, clk, reset);
 endmodule
+
+module io_pin(out, pin, in, val_we, mode_we, clk);
+    // mode: 0 = input, 1 = output
+    input clk, val_we, mode_we, in;
+    output out;
+
+    inout pin;
+
+    wire val, mode;
+    dffe_ref val_reg(val, in, clk, val_we, 1'b0);
+    dffe_ref mode_reg(mode, in, clk, mode_we, 1'b0);
+
+    assign pin = mode ? val : 1'bz;
+    assign out = mode ? val : pin;
+endmodule
+
+module io_pin_set(out, pins, pin_num, in, val_we, mode_we, clk);
+    // mode: 0 = input, 1 = output
+    input in, val_we, mode_we, clk, we;
+    input[2:0] pin_num;
+
+    inout[7:0] pins;
+
+    output[7:0] out;
+
+    genvar c;
+    generate
+        for(c=0; c<8; c=c+1) begin: loop1
+            io_pin io_pin1(
+                .out(out[c]),
+                .pin(pins[c]),
+                .in(in),
+                .val_we(val_we & (pin_num == c)),
+                .mode_we(mode_we & (pin_num == c)),
+                .clk(clk)
+            );
+        end
+    endgenerate
+endmodule
