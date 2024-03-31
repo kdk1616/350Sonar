@@ -26,7 +26,9 @@
 
 module FPGAWrapper (CLK, CPU_RESETN, LED);
 	input CLK, CPU_RESETN;
-	input[4:0] LED;
+	output[4:0] LED;
+	
+	wire reset = ~CPU_RESETN;
 
 	wire rwe, mwe;
 	wire[4:0] rd, rs1, rs2;
@@ -34,7 +36,11 @@ module FPGAWrapper (CLK, CPU_RESETN, LED);
 		rData, regA, regB,
 		memAddr, memDataIn, memDataOut;
 
-	assign LED = instAddr[4:0];
+	assign LED[3:0] = instAddr[3:0];
+	
+	assign LED[4] = CLK;
+	
+	
 
 
 	// ADD YOUR MEMORY FILE HERE
@@ -43,7 +49,7 @@ module FPGAWrapper (CLK, CPU_RESETN, LED);
 	// Main Processing Unit
 	processor CPU(
 		// .debug(debug),
-		.clock(CLK), .reset(CPU_RESETN), 
+		.clock(CLK), .reset(reset), 
 								
 		// ROM
 		.address_imem(instAddr), .q_imem(instData),
@@ -65,7 +71,7 @@ module FPGAWrapper (CLK, CPU_RESETN, LED);
 	
 	// Register File
 	regfile RegisterFile(.clock(CLK), 
-		.ctrl_writeEnable(rwe), .ctrl_reset(CPU_RESETN), 
+		.ctrl_writeEnable(rwe), .ctrl_reset(reset), 
 		.ctrl_writeReg(rd),
 		.ctrl_readRegA(rs1), .ctrl_readRegB(rs2), 
 		.data_writeReg(rData), .data_readRegA(regA), .data_readRegB(regB));
