@@ -25,6 +25,21 @@ module mux8 (out, select, in0, in1, in2, in3, in4, in5, in6, in7);
     mux2 second(out, select[2], w1, w2);
 endmodule
 
+module mux8_1bit(out, select, in0, in1, in2, in3, in4, in5, in6, in7);
+    input[2:0] select;
+    input in0, in1, in2, in3, in4, in5, in6, in7;
+    output out;
+
+    assign out = (select == 3'b000) ? in0 : 
+                 (select == 3'b001) ? in1 : 
+                 (select == 3'b010) ? in2 : 
+                 (select == 3'b011) ? in3 : 
+                 (select == 3'b100) ? in4 : 
+                 (select == 3'b101) ? in5 : 
+                 (select == 3'b110) ? in6 : 
+                 in7;
+endmodule
+
 module tristate(out, in, oe);
     input[31:0] in;
     input oe;

@@ -1,5 +1,4 @@
-./tests/nrdi_tb.v
-./Wrapper_tb.v
+./FPGAWrapper.v
 ./Wrapper.v
 ./components/shift.v
 ./components/stages.v

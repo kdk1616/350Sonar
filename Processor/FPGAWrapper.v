@@ -24,9 +24,10 @@
  *
  **/
 
-module FPGAWrapper (CLK, CPU_RESETN, LED);
+module FPGAWrapper (CLK, CPU_RESETN, LED, PINS);
 	input CLK, CPU_RESETN;
 	input[4:0] LED;
+	input[7:0] PINS;
 
 	wire rwe, mwe;
 	wire[4:0] rd, rs1, rs2;
@@ -55,7 +56,9 @@ module FPGAWrapper (CLK, CPU_RESETN, LED);
 									
 		// RAM
 		.wren(mwe), .address_dmem(memAddr), 
-		.data(memDataIn), .q_dmem(memDataOut)); 
+		.data(memDataIn), .q_dmem(memDataOut),
+		
+		.io_pins(PINS)); 
 	
 	// Instruction Memory (ROM)
 	ROM #(.MEMFILE({INSTR_FILE, ".mem"}))
