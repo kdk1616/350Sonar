@@ -44,6 +44,8 @@ module Wrapper (clock, reset,
 	assign debug[143:112] = memDataIn;
 	assign debug[144] = mwe;
 
+	wire[7:0] pins = 8'b10110101;
+
 
 	// ADD YOUR MEMORY FILE HERE
 	localparam INSTR_FILE = "processor_tests";
@@ -63,7 +65,9 @@ module Wrapper (clock, reset,
 									
 		// RAM
 		.wren(mwe), .address_dmem(memAddr), 
-		.data(memDataIn), .q_dmem(memDataOut)); 
+		.data(memDataIn), .q_dmem(memDataOut),
+		.io_pins(pins)
+		); 
 	
 	// Instruction Memory (ROM)
 	ROM #(.MEMFILE({INSTR_FILE, ".mem"}))
