@@ -159,8 +159,8 @@ module io_pin(out, pin, in, val_we, mode_we, clk);
     inout pin;
 
     wire val, mode;
-    dffe_ref val_reg(val, in, clk, val_we, 1'b0);
-    dffe_ref mode_reg(mode, in, clk, mode_we, 1'b0);
+    dffe_ref val_reg(val, in, ~clk, val_we, 1'b0);
+    dffe_ref mode_reg(mode, in, ~clk, mode_we, 1'b0);
 
     assign pin = mode ? val : 1'bz;
     assign out = mode ? val : pin;
