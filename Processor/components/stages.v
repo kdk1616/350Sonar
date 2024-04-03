@@ -459,8 +459,8 @@ module write_to_pins(out, pins, ir, o, data_dmem, q_dmem, clk);
     assign data_wren = (ir[31:27] == 5'b00111) & o[12];
     assign read_io = (ir[31:27] == 5'b01000) & o[12];
 
-    wire mode_we = o[13] & o[12];
-    wire val_we = ~o[13] & o[12];
+    wire mode_we = o[13] & o[12] & data_wren;
+    wire val_we = ~o[13] & o[12] & data_wren;
 
     wire[2:0] pin_num = o[2:0];
 
