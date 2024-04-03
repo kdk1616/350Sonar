@@ -40,7 +40,7 @@ module FPGAWrapper (CLK100MHZ, CPU_RESETN, LED, PINS);
 
 	wire CLK;
 
-	tff t(CLK, 1'b1, CLK100MHZ, 1'b0);
+	tff clock_tff(CLK, 1'b1, CLK100MHZ, 1'b0);
 
 	assign LED[3:0] = instAddr[3:0];
 	
