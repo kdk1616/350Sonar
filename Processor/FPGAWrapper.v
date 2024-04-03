@@ -24,18 +24,23 @@
  *
  **/
 
-module FPGAWrapper (CLK, CPU_RESETN, LED, PINS);
-	input CLK, CPU_RESETN;
+module FPGAWrapper (CLK100MHZ, CPU_RESETN, LED, PINS);
+	input CLK100MHZ, CPU_RESETN;
 	output[4:0] LED;
 	
 	wire reset = ~CPU_RESETN;
-	input[7:0] PINS;
+	inout[7:0] PINS;
 
 	wire rwe, mwe;
 	wire[4:0] rd, rs1, rs2;
 	wire[31:0] instAddr, instData, 
 		rData, regA, regB,
 		memAddr, memDataIn, memDataOut;
+
+
+	wire CLK;
+
+	tff t(CLK, 1'b1, CLK100MHZ, 1'b0);
 
 	assign LED[3:0] = instAddr[3:0];
 	
