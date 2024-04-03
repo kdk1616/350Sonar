@@ -168,7 +168,7 @@ endmodule
 
 module io_pin_set(out, pins, pin_num, in, val_we, mode_we, clk);
     // mode: 0 = input, 1 = output
-    input in, val_we, mode_we, clk, we;
+    input in, val_we, mode_we, clk;
     input[2:0] pin_num;
 
     inout[7:0] pins;
