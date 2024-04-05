@@ -17,7 +17,7 @@ int numSteps = 4; // Number of steps in the sequence
 //   B1001  // Step D: DA
 // };
 
-int stepSequence = 50745; // See above
+int stepSequence = 37740; // See above
 
 
 void pinMode(int pin, int mode){
@@ -58,13 +58,15 @@ void setup() {
 void stepMotor() {
   // Output the step sequence
   int currentSeq = stepSequence;
+  int ms_1 = 50000;
+  int wait_time = 100*ms_1;
 
   for (int i = 0; i < 15; i += 1) {
-
     int outBit = stepSequence & 1;
     int pinNum = i & 3;
     digitalWrite(pinNum, outBit);
-    wait();
+    stepSequence = stepSequence >> 1;
+    wait(wait_time);
   }
 
   // Move to the next step
@@ -75,7 +77,7 @@ int main(){
    setup();//init IO
 
    int ms_1 = 50000;
-   int wait_time = 100*ms_1;
+   int wait_time = 1000*ms_1;
 
    while(1) {
         stepMotor();
