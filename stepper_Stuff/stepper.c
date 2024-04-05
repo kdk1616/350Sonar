@@ -6,9 +6,7 @@
 
 
 
-int coilPins[4] = {7, 8, 9, 10}; // Coil pins connected to In1, In2, In3, In4
 int numSteps = 4; // Number of steps in the sequence
-
 // Define the sequence of steps for the stepper motor
 // const byte stepSequence4[4] = {
 //   B1100, // Step A: AB
@@ -16,8 +14,16 @@ int numSteps = 4; // Number of steps in the sequence
 //   B0011, // Step C: CD
 //   B1001  // Step D: DA
 // };
+// or?
+// const byte stepSequence4[4] = {
+//   B1010, // Step A: AB
+//   B0110, // Step B: BC
+//   B0101, // Step C: CD
+//   B1001  // Step D: DA
+// };
 
 int stepSequence = 37740; // See above
+int pins[4] = {0, 1, 2, 3};
 
 
 void pinMode(int pin, int mode){
@@ -56,32 +62,43 @@ void wait(int cycles){
     for (int i = 0; i < cycles; i += 1){}
 }
 
-void stepMotor() {
+void stepMotor(int step, int* pins) {
   // Output the step sequence
-  int currentSeq = stepSequence;
-  int ms_1 = 50000;
-  int wait_time = 10*ms_1;
-
-  for (int i = 0; i < 15; i += 1) {
-    int outBit = stepSequence & 1;
-    int pinNum = i & 3;
-    digitalWrite(pinNum, outBit);
-    stepSequence = stepSequence >> 1;
-    wait(wait_time);
-  }
-
-  // Move to the next step
+    int mod4 = step & 3;
+    if (mod4 == 0) {
+        digitalWrite(pins[0], HIGH);
+        digitalWrite(pins[1], LOW);
+        digitalWrite(pins[2], LOW);
+        digitalWrite(pins[3], HIGH);
+    } else if (mod4 == 1) {
+        digitalWrite(pins[0], LOW);
+        digitalWrite(pins[1], HIGH);
+        digitalWrite(pins[2], LOW);
+        digitalWrite(pins[3], HIGH);
+    } else if (mod4 == 2) {
+        digitalWrite(pins[0], LOW);
+        digitalWrite(pins[1], HIGH);
+        digitalWrite(pins[2], HIGH);
+        digitalWrite(pins[3], LOW);
+    } else {
+        digitalWrite(pins[0], HIGH);
+        digitalWrite(pins[1], LOW);
+        digitalWrite(pins[2], HIGH);
+        digitalWrite(pins[3], LOW);
+    }
 }
 
 int main(){
 
-   setup();//init IO
+   setup(); //init IO
 
    int ms_1 = 50000;
-//    int wait_time = 1000*ms_1;
+   int wait_time = 100*ms_1;
+   int step = 0;
 
    while(1) {
-        stepMotor();
-        // wait(wait_time);
+        stepMotor(step, pins);
+        step += 1;
+        wait(wait_time);
    }
 }
