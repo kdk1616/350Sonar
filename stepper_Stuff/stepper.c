@@ -39,27 +39,28 @@ void digitalRead(int pin){
     );
 }
 
-void wait(int ms){
-    for (int i = 0; i < ms; i = i + 1){
-    }
-}
-
-
-
 void setup() {
   // Set coil pins as outputs
     pinMode(0,OUTPUT);
     pinMode(1,OUTPUT);
     pinMode(2,OUTPUT);
     pinMode(3,OUTPUT);
+
+    digitalWrite(0,LOW);
+    digitalWrite(1,LOW);
+    digitalWrite(2,LOW);
+    digitalWrite(3,LOW);
 }
 
+void wait(int cycles){
+    for (int i = 0; i < cycles; i += 1){}
+}
 
 void stepMotor() {
   // Output the step sequence
   int currentSeq = stepSequence;
   int ms_1 = 50000;
-  int wait_time = 100*ms_1;
+  int wait_time = 10*ms_1;
 
   for (int i = 0; i < 15; i += 1) {
     int outBit = stepSequence & 1;
@@ -77,10 +78,10 @@ int main(){
    setup();//init IO
 
    int ms_1 = 50000;
-   int wait_time = 1000*ms_1;
+//    int wait_time = 1000*ms_1;
 
    while(1) {
         stepMotor();
-        wait(wait_time);
+        // wait(wait_time);
    }
 }
