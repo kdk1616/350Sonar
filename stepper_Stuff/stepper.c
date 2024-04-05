@@ -20,8 +20,6 @@ int numSteps = 4; // Number of steps in the sequence
 int stepSequence = 50745; // See above
 
 
-
-
 void pinMode(int pin, int mode){
     int addr = 12288 + pin; // 2^12 + 2^13 + pin num
     __asm__(
@@ -41,11 +39,8 @@ void digitalRead(int pin){
     );
 }
 
-void wait(){
-    for (int i = 0; i < 1000; i = i + 1){
-        for (int j = 0; j < 1000; j = j + 1){
-
-        }
+void wait(int ms){
+    for (int i = 0; i < ms; i = i + 1){
     }
 }
 
@@ -79,8 +74,11 @@ int main(){
 
    setup();//init IO
 
+   int ms_1 = 50000;
+   int wait_time = 100*ms_1;
+
    while(1) {
         stepMotor();
-        wait();
+        wait(wait_time);
    }
 }
