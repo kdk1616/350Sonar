@@ -2,7 +2,10 @@
 module ROM #(parameter DATA_WIDTH = 32, ADDRESS_WIDTH = 12, DEPTH = 4096, MEMFILE = "") (
     input wire                     clk,
     input wire [ADDRESS_WIDTH-1:0] addr,
-    output reg [DATA_WIDTH-1:0]    dataOut = 0);
+    output reg [DATA_WIDTH-1:0]    dataOut = 0,
+    input wire [ADDRESS_WIDTH-1:0] writeAddr,
+    input wire [DATA_WIDTH-1:0]    dataIn,
+    input wire                     wEn);
     
     reg[DATA_WIDTH-1:0] MemoryArray[0:DEPTH-1];
     
@@ -13,6 +16,9 @@ module ROM #(parameter DATA_WIDTH = 32, ADDRESS_WIDTH = 12, DEPTH = 4096, MEMFIL
     end
     
     always @(posedge clk) begin
-        dataOut <= MemoryArray[addr];
+        if (wEn)
+            MemoryArray[writeAddr] <= dataIn;
+        else
+            dataOut <= MemoryArray[addr];
     end
 endmodule

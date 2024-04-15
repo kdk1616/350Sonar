@@ -69,11 +69,26 @@ module Wrapper (clock, reset,
 		.io_pins(pins)
 		); 
 	
+
+	wire[11:0] memWriteAddr;
+	wire[31:0] memWriteData;
+	wire mem_ready;
+	wire BOOTLOADER_CLOCK = 1'bz;
+	wire BOOTLOADER_PIN = 1'bz;
+	wire CPU_RESETN = ~reset;
+	wordReceiver bootloader(
+		.ready(mem_ready), .out(memWriteData), .addr(memWriteAddr), 
+		.dataOnPin(BOOTLOADER_CLOCK), .dataPin(BOOTLOADER_PIN), .reset(CPU_RESETN)
+	);
+
 	// Instruction Memory (ROM)
 	ROM #(.MEMFILE({INSTR_FILE, ".mem"}))
 	InstMem(.clk(clock), 
 		.addr(instAddr[11:0]), 
-		.dataOut(instData));
+		.dataOut(instData),
+		.writeAddr(memWriteAddr),
+		.dataIn(memWriteData),
+		.wEn(memWren & mem_ready));
 	
 	// Register File
 	regfile RegisterFile(.clock(clock), 

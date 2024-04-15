@@ -14,5 +14,6 @@
 ./components/signextender.v
 ./RAM.v
 ./processor.v
+./wordReceiver.v
 ./processor_tb.v
 ./ROM.v
