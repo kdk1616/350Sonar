@@ -24,12 +24,15 @@
  *
  **/
 
-module FPGAWrapper (CLK100MHZ, CPU_RESETN, LED, PINS);
-	input CLK100MHZ, CPU_RESETN;
+module FPGAWrapper (CLK100MHZ, CPU_RESETN, LED, PINS, BOOTLOADER_READY_PIN, BOOTLOADER_PIN, BOOTLOADER_CLOCK);
+	input CLK100MHZ, CPU_RESETN, BOOTLOADER_PIN, BOOTLOADER_CLOCK;
 	output[4:0] LED;
+	output BOOTLOADER_READY_PIN;
 	
 	wire reset = ~CPU_RESETN;
 	inout[7:0] PINS;
+
+	assign BOOTLOADER_READY_PIN = CPU_RESETN;
 
 	wire rwe, mwe;
 	wire[4:0] rd, rs1, rs2;
@@ -67,12 +70,22 @@ module FPGAWrapper (CLK100MHZ, CPU_RESETN, LED, PINS);
 		.data(memDataIn), .q_dmem(memDataOut),
 		
 		.io_pins(PINS)); 
+
+	wire[11:0] memWriteAddr;
+	wire[31:0] memWriteData;
+	wire mem_ready;
+
+	wordReceiver bootloader(
+		.ready(mem_ready), .out(memWriteData), .addr(memWriteAddr), 
+		.dataOnPin(BOOTLOADER_CLOCK), .dataPin(BOOTLOADER_PIN), .reset(CPU_RESETN)
+	);
 	
 	// Instruction Memory (ROM)
 	ROM #(.MEMFILE({INSTR_FILE, ".mem"}))
 	InstMem(.clk(CLK), 
 		.addr(instAddr[11:0]), 
-		.dataOut(instData));
+		.dataOut(instData),
+		.writeAddr(memWriteAddr), .dataIn(memWriteData), .wEn(reset & mem_ready));
 	
 	// Register File
 	regfile RegisterFile(.clock(CLK), 
