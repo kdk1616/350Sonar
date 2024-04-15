@@ -32,7 +32,7 @@ module FPGAWrapper (CLK100MHZ, CPU_RESETN, LED, PINS, BOOTLOADER_READY_PIN, BOOT
 	wire reset = ~CPU_RESETN;
 	inout[7:0] PINS;
 
-	assign BOOTLOADER_READY_PIN = CPU_RESETN;
+	assign BOOTLOADER_READY_PIN = reset;
 
 	wire rwe, mwe;
 	wire[4:0] rd, rs1, rs2;
@@ -45,8 +45,6 @@ module FPGAWrapper (CLK100MHZ, CPU_RESETN, LED, PINS, BOOTLOADER_READY_PIN, BOOT
 	tff clock_tff(CLK, 1'b1, CLK100MHZ, 1'b0);
 
 	assign LED[3:0] = instAddr[3:0];
-	
-	assign LED[4] = CLK;
 	
 
 	// ADD YOUR MEMORY FILE HERE
@@ -74,9 +72,11 @@ module FPGAWrapper (CLK100MHZ, CPU_RESETN, LED, PINS, BOOTLOADER_READY_PIN, BOOT
 	wire[11:0] memWriteAddr;
 	wire[31:0] memWriteData;
 	wire mem_ready;
+	
+	assign LED[4] = mem_ready;
 
 	wordReceiver bootloader(
-		.ready(mem_ready), .out(memWriteData), .addr(memWriteAddr), 
+		.ready(mem_ready), .out(memWriteData), .addr(memWriteAddr), .clk(CLK),
 		.dataOnPin(BOOTLOADER_CLOCK), .dataPin(BOOTLOADER_PIN), .reset(CPU_RESETN)
 	);
 	
