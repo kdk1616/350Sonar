@@ -1,8 +1,8 @@
 Copyright 1986-2021 Xilinx, Inc. All Rights Reserved.
 -----------------------------------------------------------------------------------------------------------------
 | Tool Version : Vivado v.2021.1 (win64) Build 3247384 Thu Jun 10 19:36:33 MDT 2021
-| Date         : Thu Apr 11 13:10:30 2024
-| Host         : P2-08 running 64-bit major release  (build 9200)
+| Date         : Fri Apr 12 10:59:10 2024
+| Host         : P1-07 running 64-bit major release  (build 9200)
 | Command      : report_utilization -file FPGAWrapper_utilization_synth.rpt -pb FPGAWrapper_utilization_synth.pb
 | Design       : FPGAWrapper
 | Device       : 7a100tcsg324-1
@@ -30,13 +30,13 @@ Table of Contents
 +-------------------------+------+-------+------------+-----------+-------+
 |        Site Type        | Used | Fixed | Prohibited | Available | Util% |
 +-------------------------+------+-------+------------+-----------+-------+
-| Slice LUTs*             | 9317 |     0 |          0 |     63400 | 14.70 |
-|   LUT as Logic          | 9317 |     0 |          0 |     63400 | 14.70 |
+| Slice LUTs*             | 9299 |     0 |          0 |     63400 | 14.67 |
+|   LUT as Logic          | 9299 |     0 |          0 |     63400 | 14.67 |
 |   LUT as Memory         |    0 |     0 |          0 |     19000 |  0.00 |
-| Slice Registers         | 1523 |     0 |          0 |    126800 |  1.20 |
-|   Register as Flip Flop | 1523 |     0 |          0 |    126800 |  1.20 |
+| Slice Registers         | 1527 |     0 |          0 |    126800 |  1.20 |
+|   Register as Flip Flop | 1527 |     0 |          0 |    126800 |  1.20 |
 |   Register as Latch     |    0 |     0 |          0 |    126800 |  0.00 |
-| F7 Muxes                |   24 |     0 |          0 |     31700 |  0.08 |
+| F7 Muxes                |   31 |     0 |          0 |     31700 |  0.10 |
 | F8 Muxes                |    0 |     0 |          0 |     15850 |  0.00 |
 +-------------------------+------+-------+------------+-----------+-------+
 * Warning! The Final LUT count, after physical optimizations and full implementation, is typically lower. Run opt_design after synthesis, if not already completed, for a more realistic count.
@@ -55,7 +55,7 @@ Table of Contents
 | 0     |            _ |       Reset |            - |
 | 0     |          Yes |           - |            - |
 | 1     |          Yes |           - |          Set |
-| 1440  |          Yes |           - |        Reset |
+| 1444  |          Yes |           - |        Reset |
 | 0     |          Yes |         Set |            - |
 | 82    |          Yes |       Reset |            - |
 +-------+--------------+-------------+--------------+
@@ -147,15 +147,15 @@ Table of Contents
 +----------+------+---------------------+
 | Ref Name | Used | Functional Category |
 +----------+------+---------------------+
-| LUT6     | 6599 |                 LUT |
-| FDCE     | 1440 |        Flop & Latch |
-| LUT2     | 1371 |                 LUT |
-| LUT5     | 1160 |                 LUT |
-| LUT4     |  782 |                 LUT |
-| LUT3     |  530 |                 LUT |
+| LUT6     | 6597 |                 LUT |
+| FDCE     | 1444 |        Flop & Latch |
+| LUT2     | 1364 |                 LUT |
+| LUT5     | 1155 |                 LUT |
+| LUT4     |  752 |                 LUT |
+| LUT3     |  521 |                 LUT |
 | FDRE     |   82 |        Flop & Latch |
+| MUXF7    |   31 |               MuxFx |
 | LUT1     |   27 |                 LUT |
-| MUXF7    |   24 |               MuxFx |
 | IBUF     |   10 |                  IO |
 | RAMB36E1 |    8 |        Block Memory |
 | OBUFT    |    8 |                  IO |
