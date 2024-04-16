@@ -12,14 +12,20 @@ module wordReceiver(ready, out, addr, clk, dataOnPin, dataPin, reset);
     reg[4:0] counter_val;
     reg ready = 0;
 
-    always @(posedge dataOnPin) begin
-        counter_val = counter_val + 1;
-        ready = counter_val == 0;
+    wire update = dataOnPin | reset;
+
+    always @(posedge update) begin
+        counter_val = (counter_val + 1) & ~reset;
+        ready = (counter_val == 5'b11111) & ~reset;
     end
 
-    always @(posedge ready) begin
-        addr_val <= addr_val + 1;
+    wire addr_update = ready | reset;
+
+    always @(posedge addr_update) begin
+        addr_val <= (addr_val + 1) & ~reset;
     end
+
+    wire next_reg = {dataPin, out[31:1]};
     
-    register32 out_reg(.out(out), .clk(clk), .input_enable(dataOnPin), .in(next_reg), .reset(reset));
+    register32 out_reg(.out(out), .clk(dataOnPin), .input_enable(1'b1), .in(next_reg), .reset(reset));
 endmodule
