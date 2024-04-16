@@ -10,10 +10,11 @@ module wordReceiver(ready, out, addr, clk, dataOnPin, dataPin, reset);
 
     assign addr = addr_val;
     reg[4:0] counter_val;
-    assign ready = counter_val == 31;
-    
+    reg ready = 0;
+
     always @(posedge dataOnPin) begin
         counter_val = counter_val + 1;
+        ready = counter_val == 0;
     end
 
     always @(posedge ready) begin

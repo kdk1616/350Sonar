@@ -61,7 +61,7 @@ void stepMotor(int step) {
     __asm__("sw (pin3_state) 4099($0)");
 }
 
-int main(){
+// int main(){
 
     pinMode(0,OUTPUT);
     pinMode(1,OUTPUT);
@@ -76,10 +76,13 @@ int main(){
     int step = 0;
 
     while(1) {
+        __asm__("print (step)");
         stepMotor(step);
-        for(int i = 0; i < 120000; i += 1){
+        for(int i = 0; i < 1; i += 1){
         }
         step += 1;
         __asm__("print (step)");
     }
-}
+
+    step += 0;
+// }
