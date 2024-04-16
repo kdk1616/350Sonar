@@ -43,8 +43,6 @@ module FPGAWrapper (CLK100MHZ, CPU_RESETN, LED, PINS, BOOTLOADER_READY_PIN, BOOT
 
 	wire CLK;
 	tff clock_tff(CLK, 1'b1, CLK100MHZ, 1'b0);
-
-	assign LED[3:0] = instAddr[3:0];
 	
 
 	// ADD YOUR MEMORY FILE HERE
@@ -72,6 +70,8 @@ module FPGAWrapper (CLK100MHZ, CPU_RESETN, LED, PINS, BOOTLOADER_READY_PIN, BOOT
 	wire[11:0] memWriteAddr;
 	wire[31:0] memWriteData;
 	wire mem_ready;
+	
+	assign LED[3:0] = reset ? memWriteAddr : instAddr[3:0];
 	
 	assign LED[4] = mem_ready;
 
