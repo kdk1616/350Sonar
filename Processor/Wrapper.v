@@ -45,6 +45,18 @@ module Wrapper (clock, reset,
 	assign debug[144] = mwe;
 
 	wire[7:0] pins;
+	
+	reg pin5 = 0;
+	assign pins[5] = pin5;
+
+	wire pin5_count_inter, pin5_count;
+
+	CDC50 pin_counter(pin5_count_inter, clock, 1'b0);
+	CDC10 pin_counter2(pin5_count, pin5_count_inter, 1'b0);
+
+	always @(posedge pin5_count) begin
+		pin5 <= ~pin5;
+	end
 
 
 	// ADD YOUR MEMORY FILE HERE

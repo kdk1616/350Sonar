@@ -272,6 +272,28 @@ module CDC50(Q, clk, reset);
     assign Q = wires[50];
 endmodule
 
+module CDC10(Q, clk, reset);
+    input clk, reset;
+    output Q;
+
+    wire start;
+    bitmem bm1(start, 1'b1, reset, clk);
+
+    wire in = ~start ? 1'b1 : Q;
+
+    wire[13:0] wires;
+    assign wires[0] = in;
+
+    genvar c;
+    generate
+        for(c=0; c<13; c=c+1) begin: loop1
+            dffe_ref dff(wires[c+1], wires[c], clk, 1'b1, reset);
+        end
+    endgenerate
+    assign Q = wires[13];
+endmodule
+
+
 module us_counter_32bit(Q, clk, reset);
     input clk, reset;
     output[31:0] Q;
@@ -289,7 +311,8 @@ module io_pin(out, pin, in, val_we, mode_we, clk);
     inout pin;
 
     wire notclock = ~clk;
-    reg val, mode;
+    reg val = 0;
+    reg mode = 0;
     always @(posedge notclock) begin
         if (val_we) begin
             val <= in;
