@@ -73,7 +73,7 @@ module FPGAWrapper (CLK100MHZ, CPU_RESETN, LED, PINS, BOOTLOADER_READY_PIN, BOOT
 
 	wire[31:0] us_clock;
 	
-	assign LED[14:0] = reset ? memWriteData[31:17] : us_clock[14:0];
+	assign LED[14:0] = reset ? memWriteData[31:17] : us_clock[31:16];
 	
 	assign LED[15] = mem_ready;
 	
