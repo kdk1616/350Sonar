@@ -89,13 +89,16 @@ module Wrapper (clock, reset,
 		.writeAddr(memWriteAddr),
 		.dataIn(memWriteData),
 		.wEn(memWren & mem_ready));
+
+	wire[31:0] us_clock;
 	
 	// Register File
 	regfile RegisterFile(.clock(clock), 
 		.ctrl_writeEnable(rwe), .ctrl_reset(reset), 
 		.ctrl_writeReg(rd),
 		.ctrl_readRegA(rs1), .ctrl_readRegB(rs2), 
-		.data_writeReg(rData), .data_readRegA(regA), .data_readRegB(regB));
+		.data_writeReg(rData), .data_readRegA(regA), .data_readRegB(regB),
+		.reg3(us_clock));
 						
 	// Processor Memory (RAM)
 	RAM ProcMem(.clk(clock), 
