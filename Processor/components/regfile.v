@@ -41,13 +41,14 @@ module regfile (
 	clock,
 	ctrl_writeEnable, ctrl_reset, ctrl_writeReg,
 	ctrl_readRegA, ctrl_readRegB, data_writeReg,
-	data_readRegA, data_readRegB
+	data_readRegA, data_readRegB, reg3
 );
 
 	input clock, ctrl_writeEnable, ctrl_reset;
 	input [4:0] ctrl_writeReg, ctrl_readRegA, ctrl_readRegB;
 	input [31:0] data_writeReg;
 
+	output[31:0] reg3;
 	output [31:0] data_readRegA, data_readRegB;
 
 	// add your code here
@@ -63,6 +64,7 @@ module regfile (
 
 	wire[31:0] us_clock;
 	us_counter_32bit us_counter(us_clock, clock, ctrl_reset);
+	assign reg3 = us_clock;
 
 	register r1(out1, clock, ins[1], data_writeReg, ctrl_reset);
 	register r2(out2, clock, ins[2], data_writeReg, ctrl_reset);
