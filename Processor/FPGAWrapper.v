@@ -70,8 +70,10 @@ module FPGAWrapper (CLK100MHZ, CPU_RESETN, LED, PINS, BOOTLOADER_READY_PIN, BOOT
 	wire[11:0] memWriteAddr;
 	wire[31:0] memWriteData;
 	wire mem_ready;
+
+	wire[31:0] us_clock;
 	
-	assign LED[14:0] = reset ? memWriteData[31:17] : instAddr[14:0];
+	assign LED[14:0] = reset ? memWriteData[31:17] : us_clock[14:0];
 	
 	assign LED[15] = mem_ready;
 	
@@ -92,7 +94,8 @@ module FPGAWrapper (CLK100MHZ, CPU_RESETN, LED, PINS, BOOTLOADER_READY_PIN, BOOT
 		.ctrl_writeEnable(rwe), .ctrl_reset(reset), 
 		.ctrl_writeReg(rd),
 		.ctrl_readRegA(rs1), .ctrl_readRegB(rs2), 
-		.data_writeReg(rData), .data_readRegA(regA), .data_readRegB(regB));
+		.data_writeReg(rData), .data_readRegA(regA), .data_readRegB(regB),
+		.reg3(us_clock));
 						
 	// Processor Memory (RAM)
 	RAM ProcMem(.clk(CLK), 
