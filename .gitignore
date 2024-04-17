@@ -1,6 +1,7 @@
 /Processor/processor_tb.v
 /Processor/Wrapper.v
 /Processor/proc
+/Processor/processor.vcd
 # gitignore template for Xilinx Vivado Design Suite
 # website: https://www.xilinx.com/support/download.html
 
