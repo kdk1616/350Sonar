@@ -250,13 +250,34 @@ module mod_50_counter(Q, clk, reset);
     counter_6bit counter(Q, clk, reset_50);
 endmodule
 
+// cyclic delay chain (d-flip-flops passing around a 1 in a circle)
+module CDC50(Q, clk, reset);
+    input clk, reset;
+    output Q;
+
+    wire start;
+    bitmem bm1(start, 1'b1, reset, clk);
+
+    wire in = ~start ? 1'b1 : Q;
+
+    wire[50:0] wires;
+    assign wires[0] = in;
+
+    genvar c;
+    generate
+        for(c=0; c<50; c=c+1) begin: loop1
+            dffe_ref dff(wires[c+1], wires[c], clk, 1'b1, reset);
+        end
+    endgenerate
+    assign Q = wires[50];
+endmodule
+
 module us_counter_32bit(Q, clk, reset);
     input clk, reset;
     output[31:0] Q;
 
-    wire[5:0] counter;
-    mod_50_counter mod_50(counter, clk, reset);
-    wire incr = counter == 50;
+    wire incr;
+    CDC50 cdc(incr, clk, reset);
 
     counter_32bit counter_32(Q, incr, reset);
 endmodule
