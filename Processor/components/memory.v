@@ -286,12 +286,22 @@ module io_pin(out, pin, in, val_we, mode_we, clk);
     // mode: 0 = input, 1 = output
     input clk, val_we, mode_we, in;
     output out;
-
     inout pin;
 
-    wire val, mode;
-    dffe_ref val_reg(val, in, ~clk, val_we, 1'b0);
-    dffe_ref mode_reg(mode, in, ~clk, mode_we, 1'b0);
+    wire notclock = ~clk;
+    reg val, mode;
+    always @(posedge notclock) begin
+        if (val_we) begin
+            val <= in;
+        end
+        if (mode_we) begin
+            mode <= in;
+        end
+    end
+
+    // wire val, mode;
+    // dffe_ref val_reg(val, in, ~clk, val_we, 1'b0);
+    // dffe_ref mode_reg(mode, in, ~clk, mode_we, 1'b0);
 
     assign pin = mode ? val : 1'bz;
     assign out = mode ? val : pin;
