@@ -71,12 +71,10 @@ module FPGAWrapper (CLK100MHZ, CPU_RESETN, LED, PINS, BOOTLOADER_READY_PIN, BOOT
 	wire[31:0] memWriteData;
 	wire mem_ready;
 	
-	assign LED[14:0] = reset ? memWriteData[31:18] : instAddr[3:0];
+	assign LED[14:0] = reset ? memWriteData[31:17] : instAddr[14:0];
 	
 	assign LED[15] = mem_ready;
 	
-	ila_0 debug_wires(.clk(CLK), .probe0(memWriteData), .probe1(BOOTLOADER_CLOCK), .probe2(BOOTLOADER_PIN));
-
 	wordReceiver bootloader(
 		.ready(mem_ready), .out(memWriteData), .addr(memWriteAddr), .clk(CLK),
 		.dataOnPin(BOOTLOADER_CLOCK), .dataPin(BOOTLOADER_PIN), .reset(CPU_RESETN)
