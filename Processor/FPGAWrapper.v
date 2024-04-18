@@ -66,26 +66,14 @@ module FPGAWrapper (CLK100MHZ, CPU_RESETN, LED, PINS, BOOTLOADER_READY_PIN, BOOT
 		.data(memDataIn), .q_dmem(memDataOut),
 		
 		.io_pins(PINS)); 
-
-	wire[11:0] memWriteAddr;
-	wire[31:0] memWriteData;
-	wire mem_ready;
 	
-	assign LED[6:0] = reset ? memWriteData[31:26] : memAddr;
-	
-	assign LED[15] = mem_ready;
-	
-	wordReceiver bootloader(
-		.ready(mem_ready), .out(memWriteData), .addr(memWriteAddr), .clk(CLK),
-		.dataOnPin(BOOTLOADER_CLOCK), .dataPin(BOOTLOADER_PIN), .reset(CPU_RESETN)
-	);
+	assign LED[7:0] = memAddr;
 	
 	// Instruction Memory (ROM)
 	ROM #(.MEMFILE({INSTR_FILE, ".mem"}))
 	InstMem(.clk(CLK), 
 		.addr(instAddr[11:0]), 
-		.dataOut(instData),
-		.writeAddr(memWriteAddr), .dataIn(memWriteData), .wEn(reset & mem_ready));
+		.dataOut(instData));
 	
 	// Register File
 	regfile RegisterFile(.clock(CLK), 
