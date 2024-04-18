@@ -46,7 +46,7 @@ module FPGAWrapper (CLK100MHZ, CPU_RESETN, LED, PINS, BOOTLOADER_READY_PIN, BOOT
 	
 
 	// ADD YOUR MEMORY FILE HERE
-	localparam INSTR_FILE = "program";
+	localparam INSTR_FILE = "processor_tests";
 	
 	// Main Processing Unit
 	processor CPU(
@@ -73,7 +73,7 @@ module FPGAWrapper (CLK100MHZ, CPU_RESETN, LED, PINS, BOOTLOADER_READY_PIN, BOOT
 
 	wire[31:0] us_clock;
 	
-	assign LED[14:0] = reset ? memWriteData[31:17] : us_clock[31:16];
+	assign LED[14:0] = reset ? memWriteData[31:17] : memAddr;
 	
 	assign LED[15] = mem_ready;
 	

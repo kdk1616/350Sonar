@@ -1,6 +1,7 @@
 .text
 			# Initialize Valuesaddi $3, $0, 1	# r3 = 1
 addi $29 $0 2047
+sw $0 0($0)
 
 jal main
 
@@ -139,3 +140,4 @@ readUSSensor:
     lw $31 0($sp)
     addi $sp $sp 1
     jr $31
+
