@@ -43,7 +43,7 @@ module FPGAWrapper (CLK100MHZ, CPU_RESETN, LED, PINS);
 	
 
 	// ADD YOUR MEMORY FILE HERE
-	localparam INSTR_FILE = "processor_tests";
+	localparam INSTR_FILE = "read_seq";
 	
 	// Main Processing Unit
 	processor CPU(
