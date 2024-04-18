@@ -123,9 +123,9 @@ module wallace_layer_sum(out, next_sum, next_cout, cur_sum, layer, cin);
     assign out = next_sum[0];
 endmodule
 
-module wallace(out, overflow, a, b);
+module wallace(out, out_high, overflow, a, b);
     input[31:0] a, b;
-    output[31:0] out;
+    output[31:0] out, out_high;
     output overflow;
 
     // wire[31:0][31:0] layers;
@@ -177,6 +177,7 @@ module wallace(out, overflow, a, b);
     );
 
     assign extension_actual = {~extension[31], extension[30:0]};
+    assign out_high = extension_actual;
 
     check_overflow isOvf(overflow, extension_actual, out, a, b);
 endmodule
