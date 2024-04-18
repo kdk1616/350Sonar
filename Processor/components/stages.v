@@ -112,8 +112,7 @@ module Decode(
     register32 DX_A_reg(.out(out_A), .in(data_readRegA), .clk(~clock), .input_enable(1'b1), .reset(reset));
     register32 DX_B_reg(.out(out_B), .in(data_readRegB), .clk(~clock), .input_enable(1'b1), .reset(reset));
     register32 DX_PC_reg(.out(out_pc), .in(pc), .clk(~clock), .input_enable(1'b1), .reset(reset));
-    register DX_IR_reg(.out(out_ir), .in(ir_next), .clk(~clock), .input_enable(1'b1), .reset(reset));
-    // register32 DX_IR_reg(.out(out_ir), .in(ir_next), .clk(~clock), .input_enable(1'b1), .reset(reset));
+    register32 DX_IR_reg(.out(out_ir), .in(ir_next), .clk(~clock), .input_enable(1'b1), .reset(reset));
 endmodule
 
 module xecute_alu(
