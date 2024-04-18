@@ -90,7 +90,7 @@ set_property -dict { PACKAGE_PIN V17   IOSTANDARD LVCMOS33 } [get_ports { PINS[1
 set_property -dict { PACKAGE_PIN U17   IOSTANDARD LVCMOS33 } [get_ports { PINS[14] }]; #IO_L17P_T2_A14_D30_14 Sch=led[6]
 set_property -dict { PACKAGE_PIN U16   IOSTANDARD LVCMOS33 } [get_ports { PINS[15] }]; #IO_L18P_T2_A12_D28_14 Sch=led[7]
 
-set_property ALLOW_COMBINATORIAL_LOOPS TRUE[get_nets CPU/decode_layer/DX_IR_reg/loop1[27].dff/q_i_11__9_n_0]
+set_property ALLOW_COMBINATORIAL_LOOPS TRUE [get_nets CPU/decode_layer/DX_IR_reg/loop1[27].dff/q_i_11__9_n_0]
 
 ##Pmod Header JB
 #set_property -dict { PACKAGE_PIN D14   IOSTANDARD LVCMOS33 } [get_ports { JB[1] }]; #IO_L1P_T0_AD0P_15 Sch=jb[1]

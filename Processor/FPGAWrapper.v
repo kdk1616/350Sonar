@@ -24,15 +24,12 @@
  *
  **/
 
-module FPGAWrapper (CLK100MHZ, CPU_RESETN, LED, PINS, BOOTLOADER_READY_PIN, BOOTLOADER_PIN, BOOTLOADER_CLOCK);
-	input CLK100MHZ, CPU_RESETN, BOOTLOADER_PIN, BOOTLOADER_CLOCK;
+module FPGAWrapper (CLK100MHZ, CPU_RESETN, LED, PINS);
+	input CLK100MHZ, CPU_RESETN;
 	output[7:0] LED;
-	output BOOTLOADER_READY_PIN;
 	
 	wire reset = ~CPU_RESETN;
 	inout[15:0] PINS;
-
-	assign BOOTLOADER_READY_PIN = reset;
 
 	wire rwe, mwe;
 	wire[4:0] rd, rs1, rs2;
