@@ -66,7 +66,7 @@ module alu(data_operandA, data_operandB, ctrl_ALUopcode, ctrl_shiftamt, data_res
     sra sa(sra_out, data_operandA, ctrl_shiftamt);
 
     wire mult_overflow;
-    wallace multiplier(mult_out, mult_overflow, data_operandA, data_operandB);
+    wallace multiplier(mult_out, mult_hi_out, mult_overflow, data_operandA, data_operandB);
 
     
     wire[15:0] decoder_out;
@@ -80,7 +80,7 @@ module alu(data_operandA, data_operandB, ctrl_ALUopcode, ctrl_shiftamt, data_res
     tristate sra_tri(data_result, sra_out, decoder_out[5]);
     tristate mult_tri(data_result, mult_out, decoder_out[6]);
     tristate div_tri(data_result, zero, decoder_out[7]);    // division is implemented elsewhere, leave as zero
-    tristate mul_hi_tri(data_result, mul_hi_out, decoder_out[8]);
+    tristate mul_hi_tri(data_result, mult_hi_out, decoder_out[8]);
     tristate slt_tri(data_result, {31'b0, isLessThan}, decoder_out[9]);
     tristate zero_tri4(data_result, zero, decoder_out[10]);
     tristate sge(data_result, {31'b0, is_ge}, decoder_out[11]);
