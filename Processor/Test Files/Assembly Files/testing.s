@@ -1,7 +1,7 @@
 .text
 			# Initialize Valuesaddi $3, $0, 1	# r3 = 1
 addi $29 $0 2047
-sw $0 0($0)
+sw $0 1($0)        # stepper step = 0($0) 
 
 jal main
 
@@ -20,19 +20,64 @@ main:
     addi $4 $0 5
     addi $5 $0 0
     jal pinMode   # pinMode(5, INPUT)
+    addi $4 $0 8
+    addi $5 $0 1
+    jal pinMode   # pinMode(8, OUTPUT)
+    addi $4 $0 9
+    jal pinMode   # pinMode(9, OUTPUT)
+    addi $4 $0 10
+    jal pinMode   # pinMode(10, OUTPUT)
+    addi $4 $0 11
+    jal pinMode   # pinMode(11, OUTPUT)
+
+    addi $8 $0 0
+    addi $1 $0 10
+    mul $8 $8 $1    # delay time = $8 = 100000
     
     mainLoop:
+        addi $sp $sp -1
+        sw $8 0($sp)
         jal readUSSensor
-        bne $2 $0 dispHigh
-            addi $4 $0 0
-            addi $5 $0 0
-            jal digitalWrite
-            j mainLoop
-        dispHigh:
-            addi $4 $0 0
-            addi $5 $0 1
-            jal digitalWrite
-            j mainLoop
+        lw $8 0($sp)
+        addi $sp $sp 1
+        
+        addi $9 $0 1000
+        addi $10 $0 2000
+        addi $11 $0 3000
+
+        sgt $9 $2 $9        # $9 = (distance > 1000)
+        sgt $10 $2 $10      # $10 = (distance > 2000)
+        sgt $11 $2 $11      # $11 = (distance > 3000)
+        sgt $12 $2 $0       # $12 = (distance > 0)
+
+        addi $4 $0 8
+        addi $5 $12 0
+        jal digitalWrite    # digitalWrite(8, distance > 0)
+
+        addi $4 $0 9
+        addi $5 $9 0
+        jal digitalWrite    # digitalWrite(9, distance > 1000)
+
+        addi $4 $0 10
+        addi $5 $10 0
+        jal digitalWrite    # digitalWrite(10, distance > 2000)
+
+        addi $4 $0 11
+        addi $5 $11 0
+        jal digitalWrite    # digitalWrite(11, distance > 3000)
+
+        addi $sp $sp -1
+        sw $8 0($sp)
+        jal stepMotor
+        lw $8 0($sp)
+        
+        addi $4 $8 0
+        sw $8 0($sp)
+        jal delayMicros
+        lw $8 0($sp)
+        addi $sp $sp 1
+
+        j mainLoop
 
 pinMode:
     sw $5 12288($4)
@@ -140,4 +185,53 @@ readUSSensor:
     lw $31 0($sp)
     addi $sp $sp 1
     jr $31
+stepMotor:
+    addi $sp $sp -1
+    sw $31 0($sp)
+
+    lw $8 1($0)         # $8 = stepper step
+    addi $9 $0 37740    # $9 = seq
+    addi $10 $0 0       # $10 = temp i
+    stepMotor_rshift_loop:
+    blt $10 $8 stepMotor_rshift_body
+    j stepMotor_rshift_end
+        stepMotor_rshift_body:
+        sra $9 $9 4
+        addi $10 $10 1
+        j stepMotor_rshift_loop
+    stepMotor_rshift_end:
+    addi $10 $0 1       # $10 = 1
+
+    and $11 $9 $10
+    sw $11 4096($0)   # digitalWrite(0, seq & 1)
+
+    sra $11 $9 1
+    and $11 $11 $10      
+    sw $11 4097($0)      # digitalWrite(1, (seq >> 1) & 1)
+
+    sra $11 $9 2
+    and $11 $11 $10 
+    sw $11 4098($0)     # digitalWrite(1, (seq >> 2) & 1)
+
+    sra $11 $9 3
+    and $11 $11 $10
+    sw $11 4099($0)      # digitalWrite(1, (seq >> 3) & 1)
+
+    addi $10 $0 3
+    addi $8 $8 1
+    and $8 $8 $10
+    sw $8 1($0)         # stepper step = (stepper step + 1) % 4
+
+    lw $31 0($sp)
+    addi $sp $sp 1
+    jr $31
+    
+
+
+
+    
+
+
+
+
 
