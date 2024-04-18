@@ -45,7 +45,7 @@ module processor(
 
 	// Control signals
 	input clock, reset;
-    inout[7:0] io_pins;
+    inout[15:0] io_pins;
 	
 	// Imem
     output [31:0] address_imem;

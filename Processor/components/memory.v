@@ -333,15 +333,15 @@ endmodule
 module io_pin_set(out, pins, pin_num, in, val_we, mode_we, clk);
     // mode: 0 = input, 1 = output
     input in, val_we, mode_we, clk;
-    input[2:0] pin_num;
+    input[3:0] pin_num;
 
-    inout[7:0] pins;
+    inout[15:0] pins;
 
-    output[7:0] out;
+    output[15:0] out;
 
     genvar c;
     generate
-        for(c=0; c<8; c=c+1) begin: loop1
+        for(c=0; c<16; c=c+1) begin: loop1
             io_pin io_pin1(
                 .out(out[c]),
                 .pin(pins[c]),

@@ -44,7 +44,7 @@ module Wrapper (clock, reset,
 	assign debug[143:112] = memDataIn;
 	assign debug[144] = mwe;
 
-	wire[7:0] pins;
+	wire[15:0] pins;
 	
 	reg pin5 = 0;
 	assign pins[5] = pin5;
