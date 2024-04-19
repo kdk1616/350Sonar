@@ -26,10 +26,10 @@
 
 module FPGAWrapper (CLK100MHZ, CPU_RESETN, LED, PINS);
 	input CLK100MHZ, CPU_RESETN;
-	output[4:0] LED;
+	output[7:0] LED;
 	
 	wire reset = ~CPU_RESETN;
-	inout[7:0] PINS;
+	inout[15:0] PINS;
 
 	wire rwe, mwe;
 	wire[4:0] rd, rs1, rs2;
@@ -40,14 +40,10 @@ module FPGAWrapper (CLK100MHZ, CPU_RESETN, LED, PINS);
 
 	wire CLK;
 	tff clock_tff(CLK, 1'b1, CLK100MHZ, 1'b0);
-
-	assign LED[3:0] = instAddr[3:0];
-	
-	assign LED[4] = CLK;
 	
 
 	// ADD YOUR MEMORY FILE HERE
-	localparam INSTR_FILE = "processor_tests";
+	localparam INSTR_FILE = "read_seq";
 	
 	// Main Processing Unit
 	processor CPU(
@@ -67,6 +63,8 @@ module FPGAWrapper (CLK100MHZ, CPU_RESETN, LED, PINS);
 		.data(memDataIn), .q_dmem(memDataOut),
 		
 		.io_pins(PINS)); 
+	
+	assign LED[7:0] = memAddr;
 	
 	// Instruction Memory (ROM)
 	ROM #(.MEMFILE({INSTR_FILE, ".mem"}))

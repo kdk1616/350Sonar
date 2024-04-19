@@ -1,0 +1,60 @@
+
+uint32_t numbers[] = {792725503,402653186,687865856,692060161,402653210,687865857,402653210,687865858,402653210,687865859,402653210,687865860,402653210,687865861,692060160,402653210,402653250,276824068,687865856,692060160,402653212,134217744,687865856,692060161,402653212,134217744,961032192,666894336,961024000,666894336,1082658816,666894336,705036288,38174724,823263234,38174724,134217762,666894336,796655615,1073348608,705167360,709492736,713818112,717619200,688914432,402653214,278003713,134217779,50769924,848822284,134217772,717619200,688914432,402653214,278003715,50769924,848822277,134217780,1207566336,796524545,8826884,666894336,1207566336,796524545,679477248,666894336,796655615,1073348608,704643076,708837381,688914432,692060160,402653212,796655614,976879616,981073921,687865858,402653216,1111097344,1115291649,796524546,688914432,692060161,402653212,796655614,976879616,981073921,687865866,402653216,1111097344,1115291649,796524546,688914432,692060160,402653212,689045504,692060161,696278003,402653222,704643073,8683548,1207566336,796524545,666894336};
+
+#define PIN_WRITE 6
+#define PIN_DATA 7
+#define PIN_START 8
+
+void setup() {
+  // put your setup code here, to run once:
+  pinMode(PIN_WRITE, OUTPUT);
+  pinMode(PIN_DATA, OUTPUT);
+  pinMode(PIN_START, INPUT);
+  digitalWrite(PIN_WRITE, LOW);
+  digitalWrite(PIN_DATA, LOW);
+  digitalWrite(LED_BUILTIN, LOW);
+  Serial.begin(9600);
+  Serial.println("hello");
+}
+
+void sendNumber(uint32_t num){
+  for (int i = 0; i < 32; i++){
+    digitalWrite(PIN_DATA, num & 1);
+    digitalWrite(PIN_WRITE, HIGH);
+    delayMicroseconds(10);
+    // delay(50);
+    digitalWrite(PIN_WRITE, LOW);
+    // delay(50);
+    delayMicroseconds(10);
+    num >>= 1;
+  }
+  // delay(1000);
+}
+
+bool did = false;
+
+void loop() {
+  // put your main code here, to run repeatedly:
+  if (digitalRead(PIN_START) && !did){
+    did = true;
+    Serial.println("Starting");
+    digitalWrite(LED_BUILTIN, HIGH);
+    int count = 0;
+    for (int32_t num : numbers){
+      if (!digitalRead(PIN_START)) break;
+      sendNumber(num);
+      count++;
+    }
+    while (count < 4096){
+      if (!digitalRead(PIN_START)) break;
+      sendNumber(0);
+      count++;
+    }
+    
+    digitalWrite(LED_BUILTIN, LOW);
+    Serial.println("Done");
+  }
+  else if (!digitalRead(PIN_START)) {
+    did = false;
+  }
+}

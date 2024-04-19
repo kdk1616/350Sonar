@@ -451,7 +451,7 @@ module choose_data_mem_input(
 endmodule
 
 module write_to_pins(out, pins, ir, o, data_dmem, q_dmem, clk);
-    inout[7:0] pins;
+    inout[15:0] pins;
     input clk;
     input[31:0] ir, o, data_dmem, q_dmem;
     output[31:0] out;
@@ -462,15 +462,19 @@ module write_to_pins(out, pins, ir, o, data_dmem, q_dmem, clk);
     wire mode_we = o[13] & o[12] & data_wren;
     wire val_we = ~o[13] & o[12] & data_wren;
 
-    wire[2:0] pin_num = o[2:0];
+    wire[3:0] pin_num = o[3:0];
 
-    wire[7:0] pins_out;
+    wire[15:0] pins_out;
     io_pin_set io_pins(.out(pins_out), .pins(pins), .pin_num(pin_num), 
                        .in(data_dmem[0]), .val_we(val_we), .mode_we(mode_we),
                        .clk(clk));
 
-    wire pin_reading;
-    mux8_1bit read_io_mux(pin_reading, pin_num, pins_out[0], pins_out[1], pins_out[2], pins_out[3], pins_out[4], pins_out[5], pins_out[6], pins_out[7]);
+    wire pin_reading_1;
+    mux8_1bit read_io_mux1(pin_reading_1, pin_num[2:0], pins_out[0], pins_out[1], pins_out[2], pins_out[3], pins_out[4], pins_out[5], pins_out[6], pins_out[7]);
+    wire pin_reading_2;
+    mux8_1bit read_io_mux2(pin_reading_2, pin_num[2:0], pins_out[8], pins_out[9], pins_out[10], pins_out[11], pins_out[12], pins_out[13], pins_out[14], pins_out[15]);
+
+    wire pin_reading = pin_num[3] ? pin_reading_2 : pin_reading_1;
 
     assign out = read_io ? {31'b0, pin_reading} : q_dmem;
 endmodule
@@ -503,7 +507,7 @@ module Memory(
     output[31:0] address_dmem;
     output data_wren;
 
-    inout[7:0] pins;
+    inout[15:0] pins;
 
     wire[31:0] data_dmem;
 

@@ -57,8 +57,15 @@ module tristate_4(out, in, oe);
 endmodule
 
 module decoder32(out, select, enable);
-input [4:0] select;
-input enable;
-output [31:0] out;
-assign out = enable << select;
+    input [4:0] select;
+    input enable;
+    output [31:0] out;
+    assign out = enable << select;
+endmodule
+
+module decoder16(out, select, enable);
+    input [3:0] select;
+    input enable;
+    output [15:0] out;
+    assign out = enable << select;
 endmodule

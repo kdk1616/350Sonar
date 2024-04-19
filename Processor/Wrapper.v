@@ -44,7 +44,19 @@ module Wrapper (clock, reset,
 	assign debug[143:112] = memDataIn;
 	assign debug[144] = mwe;
 
-	wire[7:0] pins;
+	wire[15:0] pins;
+	
+	reg pin5 = 0;
+	assign pins[5] = pin5;
+
+	wire pin5_count_inter, pin5_count;
+
+	CDC50 pin_counter(pin5_count_inter, clock, 1'b0);
+	CDC10 pin_counter2(pin5_count, pin5_count_inter, 1'b0);
+
+	always @(posedge pin5_count) begin
+		pin5 <= ~pin5;
+	end
 
 
 	// ADD YOUR MEMORY FILE HERE
@@ -68,12 +80,14 @@ module Wrapper (clock, reset,
 		.data(memDataIn), .q_dmem(memDataOut),
 		.io_pins(pins)
 		); 
-	
+
 	// Instruction Memory (ROM)
 	ROM #(.MEMFILE({INSTR_FILE, ".mem"}))
 	InstMem(.clk(clock), 
 		.addr(instAddr[11:0]), 
 		.dataOut(instData));
+
+	wire[31:0] us_clock;
 	
 	// Register File
 	regfile RegisterFile(.clock(clock), 

@@ -24,7 +24,7 @@ None that I know of
 
 `iverilog -o proc -c FileList.txt -s Wrapper_tb -P Wrapper_tb.FILE=\"addi_basic\"`
 
-`assembler/asm -o processor_tests.mem "Test Files/Assembly Files/testing.s"`
+`assembler/asm -i assembler/custom_instructions.csv -o processor_tests.mem "Test Files/Assembly Files/testing.s"`
 
 all together:
 `assembler/asm -o processor_tests.mem "Test Files/Assembly Files/testing.s" & iverilog -o proctb -c FileList.txt -s processor_tb`

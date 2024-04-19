@@ -35,7 +35,6 @@ module tri32(out, enable, in1, in2, in3, in4, in5, in6, in7, in8, in9, in10, in1
 	tristate t30(out, in30, enable[29]);
 	tristate t31(out, in31, enable[30]);
 	tristate t32(out, in32, enable[31]);
-
 endmodule
 
 module regfile (
@@ -62,9 +61,14 @@ module regfile (
 	wire[31:0] out0, out1, out2, out3, out4, out5, out6, out7, out8, out9, out10, out11, out12, out13, out14, out15, out16, out17, out18, out19, out20, out21, out22, out23, out24, out25, out26, out27, out28, out29, out30, out31;
 	assign out0 = 32'b0;
 
+	wire[31:0] us_clock;
+	us_counter_32bit us_counter(us_clock, clock, ctrl_reset);
+
 	register r1(out1, clock, ins[1], data_writeReg, ctrl_reset);
 	register r2(out2, clock, ins[2], data_writeReg, ctrl_reset);
-	register r3(out3, clock, ins[3], data_writeReg, ctrl_reset);
+
+	register r3(out3, clock, 1'b1, us_clock, ctrl_reset);
+
 	register r4(out4, clock, ins[4], data_writeReg, ctrl_reset);
 	register r5(out5, clock, ins[5], data_writeReg, ctrl_reset);
 	register r6(out6, clock, ins[6], data_writeReg, ctrl_reset);
