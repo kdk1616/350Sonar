@@ -4,8 +4,9 @@ import time
 import math
 import serial
 
-num_states = 32  # Number of states
-max_distance = 100  # Maximum distance your sensor can measure
+#num_states = 32  # Number of states
+num_states = 80
+max_distance = 30  # Maximum distance your sensor can measure
 scan_speed = np.pi / num_states
 scan_width = 0
 
@@ -15,6 +16,7 @@ distances = []
 
 def update_plot(ax, distances, scan_angle):
     ax.clear()
+    ax.set_facecolor('black')  # Set background to black
     ax.set_theta_zero_location('N')
     ax.set_theta_direction(-1)
     
@@ -30,11 +32,11 @@ def update_plot(ax, distances, scan_angle):
         distances = np.concatenate([distances, [max_distance] * (len(angles) - len(distances))])
     
     # Plot distances within the current scan angle
-    ax.scatter(angles[(angles <= scan_angle)], distances[(angles <= scan_angle)])
+    ax.scatter(angles[(angles <= scan_angle)], distances[(angles <= scan_angle)], color='lime')  # Green points
     #ax.fill(angles[(angles <= scan_angle)], distances[(angles <= scan_angle)], 'b', alpha=0.1)
     
     # Plot scanning line
-    ax.plot([scan_angle, scan_angle], [0, max_distance], 'r--')  # Scan line in red
+    ax.plot([scan_angle, scan_angle], [0, max_distance], 'g--')  # Scan line in red
     
     ax.set_ylim(0, max_distance)  # Adjust this based on your sensor's range
     ax.set_yticks(np.arange(0, max_distance, 10))  # Adjust based on sensor range
@@ -46,6 +48,7 @@ def read_uart(ser):
     # Read data from UART
     try:
         data = ser.readline().decode().strip()
+        print("Delay read from sensor: " + data)
         return float(data)/10  # Assuming data is a single float number
     except Exception as e:
         print("Error reading UART:", e)
@@ -61,8 +64,9 @@ def main():
     ax.set_theta_zero_location('N')
     ax.set_theta_direction(-1)
     ax.set_ylim(0, max_distance)
-    ax.set_yticks(np.arange(0, max_distance, 10))
-    ax.grid(True)
+    ax.set_yticks(np.arange(0, max_distance, 6))
+    ax.grid(True, color='lime')  # Green grid
+
     
     # Open plot window
     plt.show(block=False)
@@ -81,6 +85,9 @@ def main():
         while True:
             # Read data from UART
             new_distance = read_uart(ser)
+            
+            if new_distance < 3:
+                continue
             if new_distance is not None:
                 # Update scan angle and plot
                 scan_angle += scan_speed * 2
