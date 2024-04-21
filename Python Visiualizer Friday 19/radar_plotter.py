@@ -6,7 +6,7 @@ import serial
 
 #num_states = 32  # Number of states
 num_states = 80
-max_distance = 100  # Maximum distance your sensor can measure
+max_distance = 300  # Maximum distance your sensor can measure
 scan_speed = np.pi / num_states
 scan_width = 0
 
@@ -39,8 +39,8 @@ def update_plot(ax, distances, scan_angle):
     ax.plot([scan_angle, scan_angle], [0, max_distance], 'g--')  # Scan line in red
     
     ax.set_ylim(0, max_distance)  # Adjust this based on your sensor's range
-    ax.set_yticks(np.arange(0, max_distance, 10))  # Adjust based on sensor range
-    ax.grid(True)
+    ax.set_yticks(np.arange(0, max_distance, 100))  # Adjust based on sensor range
+    ax.grid(True, color='lime')
     plt.pause(0.01)
 
 # Function to read data from UART
@@ -63,9 +63,9 @@ def main():
     ax = fig.add_subplot(111, polar=True)
     ax.set_theta_zero_location('N')
     ax.set_theta_direction(-1)
-    ax.set_ylim(0, max_distance)
-    ax.set_yticks(np.arange(0, max_distance, 6))
-    ax.grid(True, color='lime')  # Green grid
+    # ax.set_ylim(0, max_distance)
+    # ax.set_yticks(np.arange(0, max_distance, 100))
+    # ax.grid(True, color='lime')  # Green grid
 
     
     # Open plot window
