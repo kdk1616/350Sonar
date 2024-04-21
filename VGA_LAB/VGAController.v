@@ -7,14 +7,14 @@ module VGAController(
 	output[3:0] VGA_R,  // Red Signal Bits
 	output[3:0] VGA_G,  // Green Signal Bits
 	output[3:0] VGA_B,  // Blue Signal Bits
-	output[18:0] addr_ram,
-	input data_ram
+	output[18:0] pixel_addr,
+	input pixel_data
 	);
 
 	wire reset = ~CPU_RESETN; // Invert the reset signal
 	
 	// Lab Memory Files Location
-	localparam FILES_PATH = "Path/To/File/Directory";
+	localparam FILES_PATH = "";
 
 	// Clock divider 100 MHz -> 25 MHz
 	wire clk25; // 25MHz clock
@@ -59,6 +59,8 @@ module VGAController(
 	wire[PALETTE_ADDRESS_WIDTH-1:0] colorAddr; 	 // Color address for the color palette
 	assign imgAddress = x + 640*y;				 // Address calculated coordinate
 
+	assign pixel_addr = imgAddress;
+
 	RAM #(		
 		.DEPTH(PIXEL_COUNT), 				     // Set RAM depth to contain every pixel
 		.DATA_WIDTH(PALETTE_ADDRESS_WIDTH),      // Set data width according to the color palette
@@ -87,7 +89,7 @@ module VGAController(
 
 	// Assign to output color from register if active
 	wire[BITS_PER_COLOR-1:0] colorOut; 			  // Output color 
-	assign colorOut = active ? colorData : 12'd0; // When not active, output black
+	assign colorOut = pixel_data ? 12'h0f0 : (active ? colorData : 12'd0); // When not active, output black
 
 	// Quickly assign the output colors to their channels using concatenation
 	assign {VGA_R, VGA_G, VGA_B} = colorOut;

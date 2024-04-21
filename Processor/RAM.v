@@ -47,9 +47,6 @@ module DPRAM #( parameter DATA_WIDTH = 32, ADDRESS_WIDTH = 12, DEPTH = 4096) (
         for (i = 0; i < DEPTH; i = i + 1) begin
             MemoryArray[i] <= 0;
         end
-//         if(MEMFILE > 0) begin
-//             $readmemh(MEMFILE, MemoryArray);
-//         end
     end
     
     always @(posedge clk) begin
