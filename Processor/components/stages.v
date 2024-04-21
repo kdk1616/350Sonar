@@ -450,17 +450,34 @@ module choose_data_mem_input(
     );
 endmodule
 
+module write_to_pixel(out, ir, o, data_dmem, pixelAddr, pixelIn, pixelOut, pixelWe);
+    input[31:0] ir, o, data_dmem;
+    output[18:0] pixelAddr;
+    input pixelIn, pixelWe;
+    output pixelOut, out;
+
+    wire is_sw = ir[31:27] == 5'b01000;
+    wire is_lw = ir[31:27] == 5'b01001;
+    wire is_pixel = o[19];
+
+    assign pixel_We = is_sw & is_pixel;
+    assign pixelAddr = o[18:0];
+    assign pixelOut = data_dmem[0];
+    
+    assign out = pixelIn;
+endmodule
+
 module write_to_pins(out, pins, ir, o, data_dmem, q_dmem, clk);
     inout[15:0] pins;
     input clk;
     input[31:0] ir, o, data_dmem, q_dmem;
     output[31:0] out;
 
-    assign data_wren = (ir[31:27] == 5'b00111) & o[12];
-    assign read_io = (ir[31:27] == 5'b01000) & o[12];
+    assign data_wren = (ir[31:27] == 5'b00111) & o[12] & ~o[19];
+    assign read_io = (ir[31:27] == 5'b01000) & o[12] & ~o[19];
 
-    wire mode_we = o[13] & o[12] & data_wren;
-    wire val_we = ~o[13] & o[12] & data_wren;
+    wire mode_we = o[13] & o[12] & data_wren & ~o[19];
+    wire val_we = ~o[13] & o[12] & data_wren & ~o[19];
 
     wire[3:0] pin_num = o[3:0];
 
@@ -523,7 +540,7 @@ module Memory(
 
     assign address_dmem = O;
 
-    assign data_wren = (ir[31:27] == 5'b00111) & ~O[12];
+    assign data_wren = (ir[31:27] == 5'b00111) & ~O[12] & ~O[19];
 
     wire[31:0] mem_reading;
     write_to_pins io(mem_reading, pins, ir, O, data_dmem, q_dmem, clock);

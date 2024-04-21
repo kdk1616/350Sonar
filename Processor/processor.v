@@ -40,7 +40,8 @@ module processor(
     data_writeReg,                  // O: Data to write to for RegFile
     data_readRegA,                  // I: Data from port A of RegFile
     data_readRegB,                   // I: Data from port B of RegFile
-    io_pins
+    io_pins,
+    pixelAddr, pixelOut, pixelIn, pixelWe
 	);
 
 	// Control signals
@@ -55,6 +56,11 @@ module processor(
 	output [31:0] address_dmem, data;
 	output wren;
 	input [31:0] q_dmem;
+
+    // pixel mem
+    output [18:0] pixelAddr;
+    output pixelIn, pixelWe;
+    input pixelOut;
 
 	// Regfile
 	output ctrl_writeEnable;

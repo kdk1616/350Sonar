@@ -51,6 +51,30 @@ module FPGAWrapper (
 
 	// ADD YOUR MEMORY FILE HERE
 	localparam INSTR_FILE = "read_seq";
+
+
+	wire[18:0] vgaPixelAddr, cpuPixelAddr;
+	wire vgaPixelOut, cpuPixelOut;
+	wire cpuPixelIn;
+	wire pixel_wEn;
+
+	DPRAM #(
+		.DEPTH(640*480), 		       // Set depth to contain every color		
+		.DATA_WIDTH(1), 		       // Set data width according to the bits per color
+		.ADDRESS_WIDTH(19)     // Set address width according to the color count
+		)  // Memory initialization
+	pixelRam(
+		.clk(CLK), 	
+		.wEn0(pixel_wEn),
+		.wEn1(1'b0),	
+		.addr0(cpuPixelAddr),
+		.addr1(vgaPixelAddr),
+		.dataIn0(cpuPixelIn),
+		.dataIn1(1'b0),
+		.dataOut0(cpuPixelOut),
+		.dataOut1(vgaPixelOut)
+	);
+
 	
 	// Main Processing Unit
 	processor CPU(
@@ -69,7 +93,9 @@ module FPGAWrapper (
 		.wren(mwe), .address_dmem(memAddr), 
 		.data(memDataIn), .q_dmem(memDataOut),
 		
-		.io_pins(PINS)); 
+		.io_pins(PINS), 
+		.pixelAddr(cpuPixelAddr), .pixelOut(cpuPixelOut), 
+		.pixelIn(cpuPixelIn), .pixelWe(pixel_wEn)); 
 	
 	assign LED[7:0] = memAddr;
 	
@@ -94,30 +120,6 @@ module FPGAWrapper (
 		.dataIn(memDataIn), 
 		.dataOut(memDataOut)
 	);
-
-
-	wire[18:0] vgaPixelAddr, cpuPixelAddr;
-	wire vgaPixelOut, cpuPixelOut;
-	wire cpuPixelIn;
-	wire pixel_wEn = 1'b0;
-
-
-	DPRAM #(
-		.DEPTH(640*480), 		       // Set depth to contain every color		
-		.DATA_WIDTH(1), 		       // Set data width according to the bits per color
-		.ADDRESS_WIDTH(19)     // Set address width according to the color count
-		)  // Memory initialization
-	pixelRam(
-		.clk(CLK), 	
-		.wEn0(pixel_wEn),
-		.wEn1(1'b0),	
-		.addr0(cpuPixelAddr),
-		.addr1(vgaPixelAddr),
-		.dataIn0(cpuPixelIn),
-		.dataIn1(1'b0),
-		.dataOut0(cpuPixelOut),
-		.dataOut0(vgaPixelOut)
-	); 
 	
 	VGAController vga(     
 	CLK100MHZ, 			// 100 MHz System Clock
