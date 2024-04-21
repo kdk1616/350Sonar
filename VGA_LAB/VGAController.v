@@ -7,6 +7,8 @@ module VGAController(
 	output[3:0] VGA_R,  // Red Signal Bits
 	output[3:0] VGA_G,  // Green Signal Bits
 	output[3:0] VGA_B,  // Blue Signal Bits
+	output[18:0] addr_ram,
+	input data_ram
 	);
 
 	wire reset = ~CPU_RESETN; // Invert the reset signal

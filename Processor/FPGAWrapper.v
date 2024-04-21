@@ -24,12 +24,19 @@
  *
  **/
 
-module FPGAWrapper (CLK100MHZ, CPU_RESETN, LED, PINS);		// H Sync Signal
-	input CLK100MHZ, CPU_RESETN;
-	output[7:0] LED;
+module FPGAWrapper (
+    input CLK100MHZ, 
+    input CPU_RESETN, 
+    output[7:0] LED, 
+    inout[15:0] PINS,
+    output hSync, 		// H Sync Signal
+	output vSync, 		// Veritcal Sync Signal
+	output[3:0] VGA_R,  // Red Signal Bits
+	output[3:0] VGA_G,  // Green Signal Bits
+	output[3:0] VGA_B  // Blue Signal Bits
+	);
 	
-	wire reset = ~CPU_RESETN;
-	inout[15:0] PINS;
+	wire reset = ~CPU_RESETN;;
 
 	wire rwe, mwe;
 	wire[4:0] rd, rs1, rs2;
@@ -86,6 +93,35 @@ module FPGAWrapper (CLK100MHZ, CPU_RESETN, LED, PINS);		// H Sync Signal
 		.addr(memAddr[11:0]), 
 		.dataIn(memDataIn), 
 		.dataOut(memDataOut)
+	);
+
+
+	wire[18:0] pixelAddr;
+	wire pixelOut;
+	wire pixel_wEn = 1'b0;
+
+
+	RAM #(
+		.DEPTH(640*480), 		       // Set depth to contain every color		
+		.DATA_WIDTH(1), 		       // Set data width according to the bits per color
+		.ADDRESS_WIDTH(19)     // Set address width according to the color count
+		)  // Memory initialization
+	pixelRam(
+		.clk(CLK), 							   	   // Rising edge of the 100 MHz clk
+		.addr(pixelAddr),					       // Address from the ImageData RAM
+		.dataOut(pixelOut),				       // Color at current pixel
+		.wEn(pixel_wEn)); 						       // We're always reading
+	
+	VGAController vga(     
+	CLK100MHZ, 			// 100 MHz System Clock
+	CPU_RESETN, 		// Reset Signal
+	hSync, 		// H Sync Signal
+	vSync, 		// Veritcal Sync Signal
+	VGA_R,  // Red Signal Bits
+	VGA_G,  // Green Signal Bits
+	VGA_B,  // Blue Signal Bits
+	pixelAddr,
+	pixelOut
 	);
 		
 endmodule
