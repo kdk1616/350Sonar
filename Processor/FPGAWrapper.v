@@ -50,7 +50,7 @@ module FPGAWrapper (
 	
 
 	// ADD YOUR MEMORY FILE HERE
-	localparam INSTR_FILE = "read_seq";
+	localparam INSTR_FILE = "vga";
 
 
 	wire[18:0] vgaPixelAddr, cpuPixelAddr;
