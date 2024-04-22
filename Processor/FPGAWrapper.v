@@ -50,31 +50,13 @@ module FPGAWrapper (
 	
 
 	// ADD YOUR MEMORY FILE HERE
-	localparam INSTR_FILE = "vga";
+	localparam INSTR_FILE = "mvp";
 
 
 	wire[18:0] vgaPixelAddr, cpuPixelAddr;
 	wire vgaPixelOut, cpuPixelOut;
 	wire cpuPixelIn;
 	wire pixel_wEn;
-
-	DPRAM #(
-		.DEPTH(640*480), 		       // Set depth to contain every color		
-		.DATA_WIDTH(1), 		       // Set data width according to the bits per color
-		.ADDRESS_WIDTH(19)     // Set address width according to the color count
-		)  // Memory initialization
-	pixelRam(
-		.clk(CLK), 	
-		.wEn0(pixel_wEn),
-		.wEn1(1'b0),	
-		.addr0(cpuPixelAddr),
-		.addr1(vgaPixelAddr),
-		.dataIn0(cpuPixelIn),
-		.dataIn1(1'b0),
-		.dataOut0(cpuPixelOut),
-		.dataOut1(vgaPixelOut)
-	);
-
 	
 	// Main Processing Unit
 	processor CPU(
@@ -119,18 +101,6 @@ module FPGAWrapper (
 		.addr(memAddr[11:0]), 
 		.dataIn(memDataIn), 
 		.dataOut(memDataOut)
-	);
-	
-	VGAController vga(     
-	CLK100MHZ, 			// 100 MHz System Clock
-	CPU_RESETN, 		// Reset Signal
-	hSync, 		// H Sync Signal
-	vSync, 		// Veritcal Sync Signal
-	VGA_R,  // Red Signal Bits
-	VGA_G,  // Green Signal Bits
-	VGA_B,  // Blue Signal Bits
-	vgaPixelAddr,
-	vgaPixelOut
 	);
 		
 endmodule

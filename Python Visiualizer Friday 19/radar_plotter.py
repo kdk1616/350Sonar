@@ -6,7 +6,7 @@ import serial
 
 #num_states = 32  # Number of states
 num_states = 80
-max_distance = 300  # Maximum distance your sensor can measure
+max_distance = 250  # Maximum distance your sensor can measure
 scan_speed = np.pi / num_states
 scan_width = 0
 
