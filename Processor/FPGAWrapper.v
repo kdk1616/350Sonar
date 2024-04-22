@@ -129,8 +129,8 @@ module FPGAWrapper (
 	VGA_R,  // Red Signal Bits
 	VGA_G,  // Green Signal Bits
 	VGA_B,  // Blue Signal Bits
-	pixelAddr,
-	pixelOut
+	vgaPixelAddr,
+	vgaPixelOut
 	);
 		
 endmodule

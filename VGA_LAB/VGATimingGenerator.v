@@ -8,42 +8,6 @@ module VGATimingGenerator #(parameter HEIGHT=480, WIDTH=640) (
 	output vSync,		// Vertical sync, active high, marks the end of a vertical line
 	output[9:0] x,		// X coordinate from left
 	output[8:0] y);		// Y coordinate from top
-	
-	/*///////////////////////////////////////////
-	--          		VGA Timing
-	--  Horizontal:
-	--                   ___________             _____________
-	--                  |           |           |
-	--__________________|  VIDEO    |___________|  VIDEO (next line)
-
-	--___________   _____________________   ______________________
-	--           |_|                     |_|
-	--            B <-C-><----D----><-E->
-	--           <------------A--------->
-	--  The Units used below are pixels;  
-	--      B->Sync_cycle                   : H_SYNC_WIDTH
-	--      C->Back_porch                   : H_BACK_PORCH
-	--      D->Visable Area					: WIDTH
-	--      E->Front porch                  : H_FRONT_PORCH
-	--      A->horizontal line total length : H_LINE
-	--	
-	--	
-	--	Vertical:
-	--                   __________             _____________
-	--                  |          |           |          
-	--__________________|  VIDEO   |___________|  VIDEO (next frame)
-	--
-	--__________   _____________________   ______________________
-	--          |_|                     |_|
-	--           P <-Q-><----R----><-S->
-	--          <-----------O---------->
-	--	The Unit used below are horizontal lines;  
-	--  	P->Sync_cycle                   : V_SYNC_WIDTH
-	--  	Q->Back_porch                   : V_BACK_PORCH
-	--  	R->Visable Area					: HEIGHT
-	--  	S->Front porch                  : V_FRONT_PORCH
-	--  	O->vertical line total length   : V_LINE
-	///////////////////////////////////////////*/
 
 	localparam 
 		H_FRONT_PORCH = 16,
