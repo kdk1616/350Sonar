@@ -12,11 +12,17 @@ inline int digitalRead(int pin){
     __asm__("lw $return 4096((pin))");
 }
 
+inline void writePixel(int x, int y, int value){
+    int pos = 640 * y + x;
+    __asm__("lw (value) 16384(pos)");
+}
+
 inline int micros(){
     __asm__("addi $return $3 0");
 }
 
 void delayMicroseconds(int m){
+    
     __asm__(
         "addi $8 $3 0"
         "sub $9 $3 $8"
@@ -67,3 +73,5 @@ void send_protocol(int pin, int val){
     }
     digitalWrite(pin, 0);
 }
+
+

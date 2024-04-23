@@ -14,12 +14,8 @@ int us_sensor_dist()
     digitalWrite(trigger, 1);
     delayMicroseconds(10);
     digitalWrite(trigger, 0);
-    int d = pulseIn(echo, 1, 23529); // max sensor dist ~4m
+    int d = pulseIn(echo, 1, 35000); // max sensor dist ~4m
     return d; 
-}
-
-void display_number(int num){
-    
 }
 
 int main(){
@@ -45,8 +41,10 @@ int main(){
     digitalWrite(10,LOW);
     digitalWrite(11,LOW);
     
-    int delay_time = 5000;
-    int stop_time = 100000;
+    int delay_time = 2000;
+    int stop_time = 10000;
+    
+    int count = 0;
     
     while(1) {
         for (int i = 0; i < 64; i += 1){
@@ -54,6 +52,9 @@ int main(){
             delayMicroseconds(delay_time);
         }
         int dist = us_sensor_dist();
+        
+        count = (count + 1) & 31;
+        
         send_protocol(SERIAL_PIN, dist);
         digitalWrite(8, HIGH);
         digitalWrite(9, LOW);

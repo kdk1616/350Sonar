@@ -1,10 +1,10 @@
 int _stepper_step = 0;
 void stepMotor() {
     // const byte stepSequence4[4] = {
-    //   B1100, // Step A: AB
-    //   B0110, // Step B: BC
-    //   B0011, // Step C: CD
-    //   B1001  // Step D: DA
+    //   1100, // Step A: AB
+    //   0110, // Step B: BC
+    //   0011, // Step C: CD
+    //   1001  // Step D: DA
     // };
 
     int seq = 37740;
